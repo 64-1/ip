@@ -72,7 +72,7 @@ public class ControlPanel {
                         String inputDelete = scanner.nextLine().trim();
                         deleteTask(inputDelete);
                         break;
-                    case "7": // Assuming "7" is the new option for listing tasks by date
+                    case "7": 
                         System.out.println("\nPlease enter the date in yyyy-MM-dd format to list tasks:");
                         String dateString = scanner.nextLine().trim();
                         try {
@@ -82,7 +82,7 @@ public class ControlPanel {
                             System.out.println("\nInvalid date format. Please enter the date in yyyy-MM-dd format.");
                         }
                         break;
-                    case "8": // Assuming "8" is the new option for search
+                    case "8": 
                         System.out.println("\nEnter a keyword to search for tasks:");
                         String keyword = scanner.nextLine().trim();
                         taskManager.findTasks(keyword);
@@ -159,27 +159,30 @@ public class ControlPanel {
      * @param input the input string containing the task description, deadline date, and priority
      */
     private void addDeadlineTask(String input) {
-        // Adjusted split regex to account for spaces accurately
         String[] parts = input.split(" ?/by | ?/ ?");
         if (parts.length < 3) {
             System.out.println("\nIncorrect format. Please follow the correct input format 'description /by yyyy-MM-dd HH:mm /priority'.");
             return;
         }
         String description = parts[0];
-        // Corrected to assume the parts include date and time together without needing to concatenate with "|"
-        String dateTimeString = parts[1]; // This should be in "yyyy-MM-dd HH:mm" format directly from the input
+        String dateTimeString = parts[1]; 
         LocalDateTime by;
         try {
-            // Adjusted the formatter pattern to match the expected input "yyyy-MM-dd HH:mm"
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             by = LocalDateTime.parse(dateTimeString, formatter);
         } catch (DateTimeParseException e) {
             System.out.println("\nInvalid date and time. Please enter in yyyy-MM-dd HH:mm format.");
             return;
         }
-        TaskManager.Priority priority = TaskManager.Priority.valueOf(parts[2].trim().toUpperCase());
-        taskManager.addTask(taskManager.new Deadline("Deadline", description, by, priority));
-        storage.saveTasks(taskManager.getAllTasks());
+        TaskManager.Priority priority;
+        try {
+            priority = TaskManager.Priority.valueOf(parts[2].trim().toUpperCase());
+            taskManager.addTask(taskManager.new Deadline("Deadline", description, by, priority));
+            storage.saveTasks(taskManager.getAllTasks());
+        } catch (IllegalArgumentException e) {
+            System.out.println("\nInvalid priority. Please enter a valid priority value (SS, S, A, B, C, D, E).");
+            return;
+        }
     }
 
     /**
