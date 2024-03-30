@@ -117,17 +117,17 @@ public class DataStorage {
      * @param task The Task object
      * @return The string representation of the task
      */
-    private String taskToFileString(TaskManager.Task task) {
+    private String taskToFileString(Task task) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    
+
         String taskType = task instanceof TaskManager.Todo ? "T" :
                 task instanceof TaskManager.Deadline ? "D" : "E";
         String status = task instanceof TaskManager.Todo && ((TaskManager.Todo) task).isDone() ? "1" : "0";
         String priority = task.getPriority().name();
         String description = task.getDescription();
         String dateInfo = "";
-    
+
         if (task instanceof TaskManager.Deadline) {
             LocalDateTime by = ((TaskManager.Deadline) task).getBy();
             dateInfo = "|" + by.format(dateTimeFormatter);
@@ -136,10 +136,10 @@ public class DataStorage {
             LocalDate end = ((TaskManager.Event) task).getEnd();
             dateInfo = "|" + start.format(dateFormatter) + "|" + end.format(dateFormatter);
         }
-    
+
         return String.join("|", taskType, status, priority, description) + dateInfo;
     }
-    
+
     /**
      * Convert a string representation of a task to a Task object
      *
@@ -147,7 +147,7 @@ public class DataStorage {
      * @param taskManager The task manager instance
      * @return The Task object
      */
-    private TaskManager.Task fileStringToTask(String line, TaskManager taskManager) {
+    private Task fileStringToTask(String line, TaskManager taskManager) {
         String[] parts = line.split("\\|");
         String taskType = parts[0];
         boolean isDone = parts[1].equals("1");
