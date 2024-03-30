@@ -48,53 +48,56 @@ public class ControlPanel {
                         listTasks();
                         break;
                     case "2":
-                        System.out.println("Please enter the task description and priority (e.g., slain a dragon /S):");
+                        System.out.println("\nPlease enter the task description and priority (e.g., slain a dragon /S):");
                         String inputAddTask = scanner.nextLine().trim();
                         addTodoTask(inputAddTask);
                         break;
                     case "3":
-                        System.out.println("Please enter the deadline task description, deadline date and priority (e.g., submit report /by 2021-09-30 18:30 /SS):");
+                        System.out.println("\nPlease enter the deadline task description, deadline date and priority (e.g., submit report /by 2021-09-30 18:30 /SS):");
                         String inputAddDeadline = scanner.nextLine().trim();
                         addDeadlineTask(inputAddDeadline);
                         break;
                     case "4":
-                        System.out.println("Please enter the event description, start date, end date and priority (e.g., project meeting /from 2021-09-30 /to 2021-10-01 /S):");
+                        System.out.println("\nPlease enter the event description, start date, end date and priority (e.g., project meeting /from 2021-09-30 /to 2021-10-01 /S):");
                         String inputAddEvent = scanner.nextLine().trim();
                         addEventTask(inputAddEvent);
                         break;
                     case "5":
-                        System.out.println("Please enter the task number to mark as done:");
+                        System.out.println("\nPlease enter the task number to mark as done:");
                         String inputMark = scanner.nextLine().trim();
                         markTaskAsDone(inputMark);
                         break;
                     case "6":
-                        System.out.println("Choose the task you want to delete: ");
+                        System.out.println("\nChoose the task you want to delete: ");
                         String inputDelete = scanner.nextLine().trim();
                         deleteTask(inputDelete);
                         break;
                     case "7": // Assuming "7" is the new option for listing tasks by date
-                        System.out.println("Please enter the date in yyyy-MM-dd format to list tasks:");
+                        System.out.println("\nPlease enter the date in yyyy-MM-dd format to list tasks:");
                         String dateString = scanner.nextLine().trim();
                         try {
                             LocalDateTime date = LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                             taskManager.listTasksOn(date);
                         } catch (DateTimeParseException e) {
-                            System.out.println("Invalid date format. Please enter the date in yyyy-MM-dd format.");
+                            System.out.println("\nInvalid date format. Please enter the date in yyyy-MM-dd format.");
                         }
                         break;
                     case "8": // Assuming "8" is the new option for search
-                        System.out.println("Enter a keyword to search for tasks:");
+                        System.out.println("\nEnter a keyword to search for tasks:");
                         String keyword = scanner.nextLine().trim();
                         taskManager.findTasks(keyword);
                         break;
                     case "X":
-                        System.out.println("Saving changes...");
+                        System.out.println("\nSaving changes...");
+                        System.out.println("----------------------------------");
                         storage.saveUserDetails(userDetails);
-                        System.out.println("Changes saved. Exiting.");
+                        System.out.println("\nChanges saved. Exiting.");
+                        System.out.println("----------------------------------");
+                        System.out.println("\nThank you for using Erii. さよなら!");
                         scanner.close();
                         return;
                     default:
-                        System.out.println("Unknown command. Please try again.");
+                        System.out.println("\nUnknown command. Please try again.");
                         break;
                 }
 
@@ -107,7 +110,7 @@ public class ControlPanel {
      * Displays the menu options.
      */
     private static void menu() {
-        System.out.println("How may I assist you today?");
+        System.out.println("\nHow may I assist you today?");
         System.out.println("1. List tasks");
         System.out.println("2. Add a task");
         System.out.println("3. Add a deadline task");
@@ -117,7 +120,7 @@ public class ControlPanel {
         System.out.println("7. List tasks on a specific date");
         System.out.println("8. Search for a task by keyword");
         System.out.println("X. Exit");
-        System.out.print("Enter the symbol corresponding to your choice: ");
+        System.out.print("Enter the symbol corresponding to your choice: \n");
     }
 
     /**
@@ -135,7 +138,7 @@ public class ControlPanel {
     private void addTodoTask(String input) {
         String[] parts = input.split(" ?/ ?");
         if (parts.length < 2 || parts[1].isEmpty()) {
-            System.out.println("\"Incorrect format. Please ensure the task description is followed by '/' and a priority value (e.g., 'slain a dragon /SS').\"");
+            System.out.println("\n\"Incorrect format. Please ensure the task description is followed by '/' and a priority value (e.g., 'slain a dragon /SS').\"");
             return;
         }
         String description = parts[0];
@@ -143,7 +146,7 @@ public class ControlPanel {
         try {
             priority = TaskManager.Priority.valueOf(parts[1].trim().toUpperCase());
         } catch (IllegalArgumentException e) {
-            System.out.println("Invalid priority. Please enter a valid priority value (SS, S, A, B, C, D, E).");
+            System.out.println("\nInvalid priority. Please enter a valid priority value (SS, S, A, B, C, D, E).");
             return;
         }
         taskManager.addTask(taskManager.new Todo("Todo", description, priority));
@@ -159,7 +162,7 @@ public class ControlPanel {
         // Adjusted split regex to account for spaces accurately
         String[] parts = input.split(" ?/by | ?/ ?");
         if (parts.length < 3) {
-            System.out.println("Incorrect format. Please follow the correct input format 'description /by yyyy-MM-dd HH:mm /priority'.");
+            System.out.println("\nIncorrect format. Please follow the correct input format 'description /by yyyy-MM-dd HH:mm /priority'.");
             return;
         }
         String description = parts[0];
@@ -171,7 +174,7 @@ public class ControlPanel {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             by = LocalDateTime.parse(dateTimeString, formatter);
         } catch (DateTimeParseException e) {
-            System.out.println("Invalid date and time. Please enter in yyyy-MM-dd HH:mm format.");
+            System.out.println("\nInvalid date and time. Please enter in yyyy-MM-dd HH:mm format.");
             return;
         }
         TaskManager.Priority priority = TaskManager.Priority.valueOf(parts[2].trim().toUpperCase());
@@ -187,7 +190,7 @@ public class ControlPanel {
     private void addEventTask(String input) {
         String[] parts = input.split(" ?/from | ?/to | ?/");
         if (parts.length < 4) {
-            System.out.println("Incorrect format. Please ensure the task description is followed by '/from', a start date, '/to', an end date, and then a priority value.");
+            System.out.println("\nIncorrect format. Please ensure the task description is followed by '/from', a start date, '/to', an end date, and then a priority value.");
             return;
         }
         String description = parts[0];
@@ -203,10 +206,10 @@ public class ControlPanel {
             taskManager.addTask(taskManager.new Event("Event", description, startDate, endDate, priority));
             storage.saveTasks(taskManager.getAllTasks());
         } catch (DateTimeParseException e) {
-            System.out.println("Invalid date format. Please enter the date in yyyy-MM-dd format.");
+            System.out.println("\nInvalid date format. Please enter the date in yyyy-MM-dd format.");
             return;
         } catch (IllegalArgumentException e) {
-            System.out.println("Invalid priority. Please enter a valid priority value (SS, S, A, B, C, D, E).");
+            System.out.println("\nInvalid priority. Please enter a valid priority value (SS, S, A, B, C, D, E).");
             return;
         }
     }
@@ -214,20 +217,20 @@ public class ControlPanel {
     /**
      * Marks a task as done with the given input.
      *
-     * @param input the input string containing the task number
+     * @param input the input string containing the task number1
      */
     private void markTaskAsDone(String input) {
         try {
-            int taskNumber = Integer.parseInt(input.substring(5)) - 1;
+            int taskNumber = Integer.parseInt(input)-1;
             if (taskNumber < 0 || taskNumber >= taskManager.listSize()) {
-                System.out.println("Task number is out of range. Please enter a valid task number.");
-                System.out.println("Current number of tasks: " + taskManager.listSize());
+                System.out.println("\nTask number is out of range. Please enter a valid task number.");
+                System.out.println("\nCurrent number of tasks: " + taskManager.listSize());
                 return;
             }
             taskManager.markTaskAsDone(taskNumber);
             storage.saveTasks(taskManager.getAllTasks());
         } catch (NumberFormatException e) {
-            System.out.println("Please enter a valid task number.");
+            System.out.println("\nPlease enter a valid task number.");
         }
     }
 
@@ -240,14 +243,14 @@ public class ControlPanel {
         try {
             int taskNumber = Integer.parseInt(input) - 1;
             if (taskNumber < 0 || taskNumber >= taskManager.listSize()) {
-                System.out.println("Task number is out of range. Please enter a valid task number.");
-                System.out.println("Current number of tasks: " + taskManager.listSize());
+                System.out.println("\nTask number is out of range. Please enter a valid task number.");
+                System.out.println("\nCurrent number of tasks: " + taskManager.listSize());
                 return;
             }
             taskManager.deleteTask(taskNumber);
             storage.saveTasks(taskManager.getAllTasks());
         } catch (NumberFormatException e) {
-            System.out.println("Please enter a valid task number.");
+            System.out.println("\nPlease enter a valid task number.");
         }
     }
 }

@@ -180,9 +180,9 @@ public class TaskManager {
      */
     public void addTask(Task task) {
         tasks.add(task);
-        System.out.println("Got it. I've added this task:");
+        System.out.println("\nGot it. I've added this task:");
         System.out.println("  " + task);
-        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+        System.out.println("\nNow you have " + tasks.size() + " tasks in the list.");
         System.out.println("____________________________________________________________");
     }
 
@@ -197,7 +197,7 @@ public class TaskManager {
      * List all tasks in the task list
      */
     public void listTasks() {
-        System.out.println("Here are the tasks in your list:");
+        System.out.println("\nHere are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
         }
@@ -209,7 +209,7 @@ public class TaskManager {
      */
     public void sortListByPriority() {
         tasks.sort((Task t1, Task t2) -> t1.getPriority().compareTo(t2.getPriority()));
-        System.out.println("Tasks sorted by priority.");
+        System.out.println("\nTasks sorted by priority.");
     }
 
     /**
@@ -217,7 +217,7 @@ public class TaskManager {
      */
     public void sortListByType() {
         tasks.sort((Task t1, Task t2) -> t1.getName().compareTo(t2.getName()));
-        System.out.println("Tasks sorted by type.");
+        System.out.println("\nTasks sorted by type.");
     }
 
     /**
@@ -231,15 +231,15 @@ public class TaskManager {
             } else if (task instanceof Event) {
                 ((Event) task).setDone(true);
             } else {
-                System.out.println("This task type cannot be marked as done.");
+                System.out.println("\nThis task type cannot be marked as done.");
                 return;
             }
             System.out.println("----------------------------------");
-            System.out.println("Task completed");
+            System.out.println("\nTask completed");
             System.out.println(task);
             System.out.println("--------------------------------------");
         } else {
-            System.out.println("Invalid task number.");
+            System.out.println("\nInvalid task number.");
         }
     }
 
@@ -249,9 +249,9 @@ public class TaskManager {
     public void deleteTask(int taskIndex) {
         if (taskIndex >= 0 && taskIndex < tasks.size()) {
             Task task = tasks.remove(taskIndex);
-            System.out.println("Noted. I've removed this task:");
+            System.out.println("\nNoted. I've removed this task:");
             System.out.println("  " + task);
-            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+            System.out.println("\nNow you have " + tasks.size() + " tasks in the list.");
             System.out.println("____________________________________________________________");
         } else {
             System.out.println("Invalid task number.");
@@ -270,7 +270,7 @@ public class TaskManager {
      */
     public void listTasksOn(LocalDateTime date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
-        System.out.println("Tasks on " + date.format(formatter) + ":");
+        System.out.println("\nTasks on " + date.format(formatter) + ":");
         for (Task task : tasks) {
             if (task instanceof Deadline) {
                 if (((Deadline) task).getBy().isEqual(date)) {
@@ -291,7 +291,7 @@ public class TaskManager {
      */
     public void findTasks(String keyword) {
         System.out.println("____________________________________________________________");
-        System.out.println("Here are the matching tasks in your list:");
+        System.out.println("\nHere are the matching tasks in your list:");
 
         int matchCount = 0;
         for (int i = 0; i < tasks.size(); i++) {
@@ -303,7 +303,7 @@ public class TaskManager {
         }
 
         if (matchCount == 0) {
-            System.out.println("No matching tasks found.");
+            System.out.println("\nNo matching tasks found.");
         }
 
         System.out.println("____________________________________________________________");
@@ -317,7 +317,7 @@ public class TaskManager {
         try {
             return Priority.valueOf(priorityString.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid priority. Please enter a valid priority value (SS, S, A, B, C, D).");
+            throw new IllegalArgumentException("\nInvalid priority. Please enter a valid priority value (SS, S, A, B, C, D).");
         }
     }
 }

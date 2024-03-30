@@ -80,7 +80,7 @@ public class UserDetails {
      * Prompts the user to input their name.
      */
     public void inputName() {
-        System.out.println("Please enter your full name (First Name Last Name): ");
+        System.out.println("\nPlease enter your full name (First Name Last Name): ");
         String name;
 
         while (true) {
@@ -89,7 +89,7 @@ public class UserDetails {
                 this.userName = name;
                 break;
             } else {
-                System.out.println("Invalid name. Please enter both your first name and last name.");
+                System.out.println("\nInvalid name. Please enter both your first name and last name.");
             }
         }
     }
@@ -98,7 +98,7 @@ public class UserDetails {
      * Prompts the user to input their birthday.
      */
     public void inputBirthday() {
-        System.out.println("Please enter your birthday (DD/MM/YYYY): ");
+        System.out.println("\nPlease enter your birthday (DD/MM/YYYY): ");
         String birthday;
         Pattern datePattern = Pattern.compile("^\\d{2}/\\d{2}/\\d{4}$");
 
@@ -109,7 +109,7 @@ public class UserDetails {
                 this.userBirthday = birthday;
                 break;
             } else {
-                System.out.println("Invalid format. Please enter your birthday in DD/MM/YYYY format.");
+                System.out.println("\nInvalid format. Please enter your birthday in DD/MM/YYYY format.");
             }
         }
     }
@@ -118,7 +118,7 @@ public class UserDetails {
      * Prompts the user to input their gender.
      */
     public void inputGender() {
-        System.out.println("Please enter your gender: ");
+        System.out.println("\nPlease enter your gender: ");
         System.out.println("1. Male");
         System.out.println("2. Female");
         System.out.println("3. Other");
@@ -137,7 +137,7 @@ public class UserDetails {
                     gender = "Other";
                     break;
                 default:
-                    System.out.println("Invalid option selected. Please enter 1, 2, or 3.");
+                    System.out.println("\nInvalid option selected. Please enter 1, 2, or 3.");
                     continue;
             }
             this.userGender = gender;
