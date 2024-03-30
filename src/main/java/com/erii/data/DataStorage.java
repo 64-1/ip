@@ -111,6 +111,12 @@ public class DataStorage {
         return userDetails;
     }
 
+    /**
+     * Convert a Task object to a string representation
+     *
+     * @param task The Task object
+     * @return The string representation of the task
+     */
     private String taskToFileString(TaskManager.Task task) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -134,8 +140,13 @@ public class DataStorage {
         return String.join("|", taskType, status, priority, description) + dateInfo;
     }
     
-
-// Convert a string representation from a file to a task object
+    /**
+     * Convert a string representation of a task to a Task object
+     *
+     * @param line        The string representation of the task
+     * @param taskManager The task manager instance
+     * @return The Task object
+     */
     private TaskManager.Task fileStringToTask(String line, TaskManager taskManager) {
         String[] parts = line.split("\\|");
         String taskType = parts[0];
