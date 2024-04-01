@@ -34,8 +34,10 @@ Welcome to the Erii application, your comprehensive assistant for managing tasks
 
 ## Navigating the Control Panel
 The Control Panel is the heart of your interaction with Erii. From here, you can access all the features of the application.
-- Task List: Access your list of tasks from the main interface. Here, you can view pending tasks, mark tasks as completed, and add new tasks.
-- User Details: View and update your personal details through the Control Panel. Keeping your information up to date ensures a personalized and efficient experience.
+- Task List: Access your list of tasks from the main interface.
+- Add Task: Create various task types, from deadline to event tasks.
+- Mark Task: Mark a Task as done.
+- Search Task: Search tasks by keyword or by date.
 
 ## FAQs
 - Q: How do I update my personal information?
