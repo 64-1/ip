@@ -9,6 +9,9 @@ import java.util.Scanner;
 import com.erii.user.UserDetails;
 import com.erii.core.TaskManager;
 import com.erii.data.DataStorage;
+import com.erii.util.DateValidator;
+import com.erii.util.DateTimeValidator;
+import com.erii.exception.DateTimeNotAfterCurrentTimeException;
 
 /**
  * The ControlPanel class represents the user interface control panel for managing tasks.
@@ -73,14 +76,7 @@ public class ControlPanel {
                         deleteTask(inputDelete);
                         break;
                     case "7": 
-                        System.out.println("\nPlease enter the date in yyyy-MM-dd format to list tasks:");
-                        String dateString = scanner.nextLine().trim();
-                        try {
-                            LocalDateTime date = LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                            taskManager.listTasksOn(date);
-                        } catch (DateTimeParseException e) {
-                            System.out.println("\nInvalid date format. Please enter the date in yyyy-MM-dd format.");
-                        }
+                        searchByDate(scanner);
                         break;
                     case "8": 
                         System.out.println("\nEnter a keyword to search for tasks:");
@@ -174,6 +170,12 @@ public class ControlPanel {
             System.out.println("\nInvalid date and time. Please enter in yyyy-MM-dd HH:mm format.");
             return;
         }
+        try {
+            DateTimeValidator.validateDateTimeIsAfterCurrentTime(by);
+        } catch (DateTimeNotAfterCurrentTimeException e) {
+            System.out.println("\nInvalid date and time. Please enter a date and time after the current date and time.");
+            return;
+        }
         TaskManager.Priority priority;
         try {
             priority = TaskManager.Priority.valueOf(parts[2].trim().toUpperCase());
@@ -200,22 +202,30 @@ public class ControlPanel {
         String startDateString = parts[1];
         String endDateString = parts[2];
         TaskManager.Priority priority;
-
+    
         try {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate startDate = LocalDate.parse(startDateString, dateFormatter);
-            LocalDate endDate = LocalDate.parse(endDateString, dateFormatter);
+            LocalDate endDate = LocalDate.parse(endDateString, dateFormatter);    
+            DateValidator.validateDateIsAfterCurrentTime(startDate);
+            if(!endDate.isAfter(startDate)) {
+                throw new DateTimeNotAfterCurrentTimeException("\nThe end date must be after the start date.");
+            }
             priority = TaskManager.Priority.valueOf(parts[3].trim().toUpperCase());
             taskManager.addTask(taskManager.new Event("Event", description, startDate, endDate, priority));
             storage.saveTasks(taskManager.getAllTasks());
         } catch (DateTimeParseException e) {
             System.out.println("\nInvalid date format. Please enter the date in yyyy-MM-dd format.");
             return;
+        } catch (DateTimeNotAfterCurrentTimeException e) {
+            System.out.println(e.getMessage());
+            return;
         } catch (IllegalArgumentException e) {
             System.out.println("\nInvalid priority. Please enter a valid priority value (SS, S, A, B, C, D, E).");
             return;
         }
     }
+    
 
     /**
      * Marks a task as done with the given input.
@@ -256,4 +266,51 @@ public class ControlPanel {
             System.out.println("\nPlease enter a valid task number.");
         }
     }
+
+    /**
+     * Lists tasks on a specific date.
+     *
+     * @param date the date to list tasks on
+     */
+    private void searchByDate(Scanner scanner) {
+
+        System.out.println("\nPlease select the type of task to search:");
+        System.out.println("1. Deadline Task");
+        System.out.println("2. Event Task");
+        System.out.print("Your choice (1/2): ");
+        String choice = scanner.nextLine().trim();
+
+        switch (choice) {
+            case "1": // Deadline task
+                System.out.println("\nPlease enter the date and time in yyyy-MM-dd HH:mm format to list deadline tasks.");
+                System.out.println("For example, 2021-09-30 18:30.");
+                break;
+            case "2": // Event task
+                System.out.println("\nPlease enter the date in yyyy-MM-dd format to list event tasks.");
+                System.out.println("For example, 2021-09-30.");
+                break;
+            default:
+                System.out.println("\nInvalid choice. Please enter 1 or 2.");
+                return;
+        }
+
+        String dateString = scanner.nextLine().trim();
+
+        try {
+            if ("1".equals(choice)) {
+                LocalDateTime date = LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                taskManager.listTasksOn(date);
+                return;
+            } else {
+                LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                taskManager.listTasksOn(date); 
+                return;
+            }
+        } catch (DateTimeParseException e) {
+            System.out.println("\nInvalid date format. Please enter the date in the correct format.");
+        } catch (DateTimeNotAfterCurrentTimeException e) {
+            System.out.println("\nInvalid date. Please enter a date after the current date.");
+        }      
+    }
+
 }

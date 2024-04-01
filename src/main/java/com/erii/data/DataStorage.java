@@ -121,8 +121,16 @@ public class DataStorage {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-        String taskType = task instanceof TaskManager.Todo ? "T" :
-                task instanceof TaskManager.Deadline ? "D" : "E";
+        String taskType;
+        if (task instanceof TaskManager.Deadline) {
+            taskType = "D";
+        } else if (task instanceof TaskManager.Event) {
+            taskType = "E";
+        } else if (task instanceof TaskManager.Todo) {
+            taskType = "T";
+        } else {
+            taskType = "Unknown";
+        }
         String status = task instanceof TaskManager.Todo && ((TaskManager.Todo) task).isDone() ? "1" : "0";
         String priority = task.getPriority().name();
         String description = task.getDescription();
@@ -155,7 +163,7 @@ public class DataStorage {
         String description = parts[3];
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         switch (taskType) {
             case "T":

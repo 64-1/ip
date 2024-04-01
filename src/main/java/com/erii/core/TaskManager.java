@@ -11,9 +11,7 @@ import java.time.format.DateTimeFormatter;
  * It provides functionality to add tasks, list tasks, mark tasks as done, delete tasks, and search for tasks.
  * Tasks can be of different types, such as Todo, Deadline, and Event, each with its own properties and behaviors.
  */
-/**
- * The TaskManager class represents a task manager that manages a list of tasks.
- */
+
 public class TaskManager {
 
     /**
@@ -38,7 +36,7 @@ public class TaskManager {
          * @param description the description of the task
          * @param priority    the priority of the task
          */
-        public Task(String name, String description, Priority priority) {
+        public Task(final String name, final String description, final Priority priority) {
             this.name = name;
             this.description = description;
             this.priority = priority;
@@ -76,7 +74,7 @@ public class TaskManager {
          *
          * @param priority the priority to be set
          */
-        public void setPriority(Priority priority) {
+        public void setPriority(final Priority priority) {
             this.priority = priority;
         }
 
@@ -109,7 +107,7 @@ public class TaskManager {
          * @param description the description of the todo task
          * @param priority    the priority of the todo task
          */
-        public Todo(String name, String description, Priority priority) {
+        public Todo(final String name, final String description, final Priority priority) {
             super(name, description, priority);
             isDone = false;
         }
@@ -119,7 +117,7 @@ public class TaskManager {
          *
          * @param done the done status to be set
          */
-        public void setDone(boolean done) {
+        public void setDone(final boolean done) {
             isDone = done;
         }
 
@@ -160,14 +158,15 @@ public class TaskManager {
         protected LocalDateTime by;
 
         /**
-         * Constructs a Deadline object with the specified name, description, deadline, and priority.
+         * Constructs a Deadline object with the specified name, description, deadline,
+         * and priority.
          *
          * @param name        the name of the deadline task
          * @param description the description of the deadline task
          * @param by          the deadline of the deadline task
          * @param priority    the priority of the deadline task
          */
-        public Deadline(String name, String description, LocalDateTime by, Priority priority) {
+        public Deadline(final String name, final String description, final LocalDateTime by, final Priority priority) {
             super(name, description, priority);
             this.by = by;
         }
@@ -186,7 +185,7 @@ public class TaskManager {
          *
          * @param by the deadline to be set
          */
-        public void setBy(LocalDateTime by) {
+        public void setBy(final LocalDateTime by) {
             this.by = by;
         }
 
@@ -199,7 +198,8 @@ public class TaskManager {
         public String toString() {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
             String formattedDate = by.format(formatter);
-            return "[D]" + super.getStatusIcon() + " " + description + " <" + priority + "> " + " (by: " + formattedDate + ")";
+            return "[D]" + super.getStatusIcon() + " " + description + " <" + priority + "> " + " (by: " + formattedDate
+                    + ")";
         }
     }
 
@@ -212,7 +212,8 @@ public class TaskManager {
         protected LocalDate end;
 
         /**
-         * Constructs an Event object with the specified name, description, start date, end date, and priority.
+         * Constructs an Event object with the specified name, description, start date,
+         * end date, and priority.
          *
          * @param name        the name of the event task
          * @param description the description of the event task
@@ -220,7 +221,8 @@ public class TaskManager {
          * @param end         the end date of the event task
          * @param priority    the priority of the event task
          */
-        public Event(String name, String description, LocalDate start, LocalDate end, Priority priority) {
+        public Event(final String name, final String description, final LocalDate start, final LocalDate end,
+                final Priority priority) {
             super(name, description, priority);
             this.start = start;
             this.end = end;
@@ -231,7 +233,7 @@ public class TaskManager {
          *
          * @param done the done status to be set
          */
-        public void setDone(boolean done) {
+        public void setDone(final boolean done) {
             isDone = done;
         }
 
@@ -271,7 +273,8 @@ public class TaskManager {
         @Override
         public String toString() {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
-            return "[E]" + getStatusIcon() + " " + description + " <" + priority + "> " + " (from: " + start.format(formatter) + " to: " + end.format(formatter) + ")";
+            return "[E]" + getStatusIcon() + " " + description + " <" + priority + "> " + " (from: "
+                    + start.format(formatter) + " to: " + end.format(formatter) + ")";
         }
     }
 
@@ -291,7 +294,7 @@ public class TaskManager {
      *
      * @param task the task to be added
      */
-    public void addTask(Task task) {
+    public void addTask(final Task task) {
         tasks.add(task);
         System.out.println("\nGot it. I've added this task:");
         System.out.println("  " + task);
@@ -304,7 +307,7 @@ public class TaskManager {
      *
      * @param task the task to be loaded
      */
-    public void loadTask(Task task) {
+    public void loadTask(final Task task) {
         tasks.add(task);
     }
 
@@ -340,7 +343,7 @@ public class TaskManager {
      *
      * @param taskIndex the index of the task to be marked as done
      */
-    public void markTaskAsDone(int taskIndex) {
+    public void markTaskAsDone(final int taskIndex) {
         if (taskIndex >= 0 && taskIndex < tasks.size()) {
             Task task = tasks.get(taskIndex);
             if (task instanceof Todo) {
@@ -365,7 +368,7 @@ public class TaskManager {
      *
      * @param taskIndex the index of the task to be deleted
      */
-    public void deleteTask(int taskIndex) {
+    public void deleteTask(final int taskIndex) {
         if (taskIndex >= 0 && taskIndex < tasks.size()) {
             Task task = tasks.remove(taskIndex);
             System.out.println("\nNoted. I've removed this task:");
@@ -387,25 +390,54 @@ public class TaskManager {
     }
 
     /**
-     * Lists tasks on a specific date.
+     * Lists deadline tasks on a specific datetime.
      *
-     * @param date the date to filter tasks
+     * @param datetime the datetime to filter deadline tasks
      */
-    public void listTasksOn(LocalDateTime date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
-        System.out.println("\nTasks on " + date.format(formatter) + ":");
+    public void listTasksOn(final LocalDateTime datetime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+        System.out.println("\nDeadline Tasks on " + datetime.format(formatter) + ":");
+
+        boolean found = false;
         for (Task task : tasks) {
             if (task instanceof Deadline) {
-                if (((Deadline) task).getBy().isEqual(date)) {
+                LocalDateTime taskDatetime = ((Deadline) task).getBy();
+                if (taskDatetime.isEqual(datetime)) {
                     System.out.println(task);
+                    found = true;
                 }
             }
-            // Include similar logic for Event if it also uses LocalDateTime
+        }
+
+        if (!found) {
+            System.out.println("No deadline tasks found for this date and time.");
+        }
+    }
+
+    /**
+     * Lists event tasks occurring on a specific date.
+     *
+     * @param date the date to filter event tasks
+     */
+    public void listTasksOn(final LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        System.out.println("\nEvent Tasks on " + date.format(formatter) + ":");
+
+        boolean found = false;
+        for (Task task : tasks) {
             if (task instanceof Event) {
-                if (((Event) task).getStart().isEqual(date.toLocalDate()) && ((Event) task).getEnd().isEqual(date.toLocalDate())) {
+                LocalDate startDate = ((Event) task).getStart();
+                LocalDate endDate = ((Event) task).getEnd();
+                if ((date.isEqual(startDate) || date.isAfter(startDate))
+                        && (date.isEqual(endDate) || date.isBefore(endDate))) {
                     System.out.println(task);
+                    found = true;
                 }
             }
+        }
+
+        if (!found) {
+            System.out.println("No event tasks found for this date.");
         }
     }
 
@@ -414,7 +446,7 @@ public class TaskManager {
      *
      * @param keyword the keyword to search for
      */
-    public void findTasks(String keyword) {
+    public void findTasks(final String keyword) {
         System.out.println("____________________________________________________________");
         System.out.println("\nHere are the matching tasks in your list:");
 
@@ -434,7 +466,6 @@ public class TaskManager {
         System.out.println("____________________________________________________________");
     }
 
-
     /**
      * Validates and converts a priority string to a Priority enum.
      *
@@ -442,11 +473,10 @@ public class TaskManager {
      * @return the corresponding Priority enum value
      * @throws IllegalArgumentException if the priority string is invalid
      */
-    public static Priority validateAndConvertPriority(String priorityString) throws IllegalArgumentException {
+    public static Priority validateAndConvertPriority(final String priorityString) throws IllegalArgumentException {
         try {
             return Priority.valueOf(priorityString.toUpperCase());
         } catch (IllegalArgumentException e) {
-            // Handle the exception here or rethrow it
             throw e;
         }
     }
