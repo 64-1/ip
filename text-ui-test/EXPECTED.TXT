@@ -21,7 +21,26 @@ Hello from
        \:::\____\               \::|   |                 \:::\____\               \:::\____\        
         \::/    /                \:|   |                  \::/    /                \::/    /        
          \/____/                  \|___|                   \/____/                  \/____/         
-                                                                                                    
-                                                                                                
 
+Initializing Kassel Academy...
+Welcome back, SIYI LIU
+
+Here are the tasks in your list:
+____________________________________________________________
+
+How may I assist you today?
+1. List tasks
+2. Add a task
+3. Add a deadline task
+4. Add an event task
+5. Mark a task as done
+6. Delete a task
+7. List tasks on a specific date
+8. Search for a task by keyword
+X. Exit
+Enter the symbol corresponding to your choice:
+1
+
+Here are the tasks in your list:
+____________________________________________________________
 
